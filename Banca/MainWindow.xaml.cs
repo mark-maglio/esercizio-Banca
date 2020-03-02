@@ -54,7 +54,7 @@ namespace Banca
             if (Femmina.IsChecked == true)
             {
                 frase = $"{txt_Cognome.Text}{txt_Nome.Text} Residente in {cmb_Residenza.SelectedItem} nata il {Data.ToShortDateString()} ";
-            }
+            } 
             else
             {
                 frase = $"{txt_Cognome.Text}{txt_Nome.Text} Residente in {cmb_Residenza.SelectedItem} nato il {Data.ToShortDateString()} ";
