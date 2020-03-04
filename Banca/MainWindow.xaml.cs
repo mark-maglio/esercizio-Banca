@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Banca
+namespace GestionePrestito
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +24,7 @@ namespace Banca
         public MainWindow()
         {
             InitializeComponent();
+
             cmb_Residenza.Items.Add("Foligno");
             cmb_Residenza.Items.Add("Perugia");
             cmb_Residenza.Items.Add("Bastia");
@@ -44,21 +46,72 @@ namespace Banca
             cmb_Residenza.Items.Add("Montefalco");
             cmb_Residenza.Items.Add("Magione");
         }
+        int rate;
+        int importo;
+        int perc;
+        int calcoloperc;
+        int importores;
+        int imprata;
+        List<string> riepiloghi = new List<string>();
+        string cognome;
+        string nome;
+        string nat;
+        string citta;
+        string rep1;
+        string rep2;
+        const string file = ("stat.csv");
+        private void txtcalcola_Click(object sender, RoutedEventArgs e)
 
-        private void btn_Calcola_Click(object sender, RoutedEventArgs e)
         {
-            DateTime Data = (DateTime)Data_Nascita.SelectedDate;
-            string frase;
-            string cognome = txt_Cognome.Text;
-            string nome = txt_Nome.Text;
-            if (Femmina.IsChecked == true)
+            rate = int.Parse(txtrate.Text);
+            importo = int.Parse(txtimporto.Text);
+            perc = int.Parse(txtpercentuale.Text);
+            calcoloperc = (perc * importo) / 100;
+            importores = importo + calcoloperc;
+            lblrestituire.Content = importores;
+            imprata = importores / rate;
+            lblimprata.Content = imprata;
+
+        }
+
+        private void txtstampa_Click(object sender, RoutedEventArgs e)
+        {
+            cognome = txtcognome.Text;
+            nome = txtnome.Text;
+
+            if (rdbf.IsChecked == true)
             {
-                frase = $"{txt_Cognome.Text}{txt_Nome.Text} Residente in {cmb_Residenza.SelectedItem} nata il {Data.ToShortDateString()} ";
-            } 
-            else
-            {
-                frase = $"{txt_Cognome.Text}{txt_Nome.Text} Residente in {cmb_Residenza.SelectedItem} nato il {Data.ToShortDateString()} ";
+                nat = "nata";
             }
+            else
+                nat = "nato";
+            citta = cmb_Residenza.Text;
+            rate = int.Parse(txtrate.Text);
+            importo = int.Parse(txtimporto.Text);
+            perc = int.Parse(txtpercentuale.Text);
+            calcoloperc = (perc * importo) / 100;
+            importores = importo + calcoloperc;
+            imprata = importores / rate;
+            rep1 = ($"{cognome} {nome}, residente in {citta} {nat} il {datapicker.SelectedDate}; prestito di {importo} ad un tasso del {perc}% da rstituire in {rate} rate da {imprata}€ ciascuna, per un totale di {importores}€.");
+            rep2 = $"{cognome};{nome};{citta};{nat};{datapicker.SelectedDate};{importo};{perc};{rate};{imprata};{importores}";
+            lblresult.Content = (rep1);
+            riepiloghi.Add(rep2);
+        }
+
+        private void txtnuovo_Click(object sender, RoutedEventArgs e)
+        {
+            StreamWriter w = new StreamWriter(file);
+            w.WriteLine("cognome;nome;città;sesso;data;importo richiesto;percentuale interessi;numero rate;importo singola rata;importo da restituire");
+
+            for (int i = 0; i < riepiloghi.Count; i++)
+            {
+                {
+                    w.WriteLine(riepiloghi[i]);
+                }
+
+            }
+            w.Flush();
+            w.Close();
         }
     }
 }
