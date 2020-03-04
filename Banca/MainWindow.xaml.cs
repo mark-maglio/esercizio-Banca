@@ -63,6 +63,8 @@ namespace GestionePrestito
         private void txtcalcola_Click(object sender, RoutedEventArgs e)
 
         {
+            nome = txtnome.Text;
+            cognome = txtcognome.Text;
             rate = int.Parse(txtrate.Text);
             importo = int.Parse(txtimporto.Text);
             perc = int.Parse(txtpercentuale.Text);
@@ -71,7 +73,18 @@ namespace GestionePrestito
             lblrestituire.Content = importores;
             imprata = importores / rate;
             lblimprata.Content = imprata;
-
+            if (rdbf.IsChecked == true)
+            {
+                nat = "nata";
+            }
+            else
+            {
+                nat = "nato";
+            }
+            rep1 = ($"{cognome} {nome} residente in {citta} {nat} il {datapicker.SelectedDate}; prestito di {importo} ad un tasso del {perc}% da restituire in {rate} rate da {imprata}€ ciascuna, per un totale di {importores}€.");
+            rep2 = $"{cognome};{nome};{citta};{nat};{datapicker.SelectedDate};{importo};{perc};{rate};{imprata};{importores}";
+            lblresult.Content = (rep1);
+            riepiloghi.Add(rep2);
         }
 
         private void txtstampa_Click(object sender, RoutedEventArgs e)
@@ -79,12 +92,7 @@ namespace GestionePrestito
             cognome = txtcognome.Text;
             nome = txtnome.Text;
 
-            if (rdbf.IsChecked == true)
-            {
-                nat = "nata";
-            }
-            else
-                nat = "nato";
+
             citta = cmb_Residenza.Text;
             rate = int.Parse(txtrate.Text);
             importo = int.Parse(txtimporto.Text);
@@ -92,10 +100,6 @@ namespace GestionePrestito
             calcoloperc = (perc * importo) / 100;
             importores = importo + calcoloperc;
             imprata = importores / rate;
-            rep1 = ($"{cognome} {nome}, residente in {citta} {nat} il {datapicker.SelectedDate}; prestito di {importo} ad un tasso del {perc}% da rstituire in {rate} rate da {imprata}€ ciascuna, per un totale di {importores}€.");
-            rep2 = $"{cognome};{nome};{citta};{nat};{datapicker.SelectedDate};{importo};{perc};{rate};{imprata};{importores}";
-            lblresult.Content = (rep1);
-            riepiloghi.Add(rep2);
         }
 
         private void txtnuovo_Click(object sender, RoutedEventArgs e)
@@ -112,6 +116,6 @@ namespace GestionePrestito
             }
             w.Flush();
             w.Close();
-        } 
+        }
     }
 }
